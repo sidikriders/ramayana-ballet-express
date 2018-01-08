@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false
     },
+    totalPrice: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false
