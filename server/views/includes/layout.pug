@@ -1,0 +1,41 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/style.css')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name="theme-color", content="#840c0c")
+    link(href="https://fonts.googleapis.com/css?family=Roboto:400,500", rel="stylesheet")
+    link(rel='apple-touch-icon', sizes='76x76', href='/img/favicon/apple-touch-icon.png')
+    link(rel='icon', type='image/png', sizes='32x32', href='/img/favicon/favicon-32x32.png')
+    link(rel='icon', type='image/png', sizes='16x16', href='/img/favicon/favicon-16x16.png')
+    link(rel='manifest', href='/img/favicon/site.webmanifest')
+    link(rel='mask-icon', href='/img/favicon/safari-pinned-tab.svg', color='#f0dfad')
+    meta(name='msapplication-TileColor', content='#f0dfad')
+  body
+    #header
+      .header-left
+        a(href='/')
+          img(src="http://via.placeholder.com/100x50/f0dfad/333?text=dummy%20logo", alt="logo-ramayana-ballet")
+        a.header-link(href='')
+          span= h.bo
+        a.header-link(href='')
+          span= h.atrak
+        a.header-link(href='')
+          span= h.ja
+        a.header-link(href='')
+          span= h.pt
+      .header-right
+        .header-link
+          .lang-select.header-dropdown
+            p= lang.toUpperCase()
+            ul.lang-opt
+              each lang in h.languageSelection
+                li.opt
+                  if oriUrlMinLang === '/'
+                    a(href='/' + lang)= lang.toUpperCase()
+                  else
+                    a(href='/' + lang + oriUrlMinLang)= lang.toUpperCase()
+    #body-content
+      block body
+    #side-menu

@@ -1,0 +1,22 @@
+{
+  "id": {
+    "bo": "Pesan Online",
+    "atrak": "Atraksi",
+    "ja": "Jadwal Acara",
+    "pt": "Paket Tour",
+    "languageSelection": [
+      "id",
+      "en"
+    ]
+  },
+  "en": {
+    "bo": "Book Online",
+    "atrak": "Attraction",
+    "ja": "Schedule of Events",
+    "pt": "Tour Packages",
+    "languageSelection": [
+      "id",
+      "en"
+    ]
+  }
+}

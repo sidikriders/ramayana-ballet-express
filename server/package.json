@@ -13,6 +13,7 @@
     "dotenv": "^5.0.0",
     "express": "~4.15.5",
     "express-session": "^1.15.6",
+    "iplocate": "^1.0.7",
     "morgan": "~1.9.0",
     "mysql2": "^1.5.2",
     "nodemon": "^1.14.12",
