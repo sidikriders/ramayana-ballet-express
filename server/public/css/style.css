@@ -1,0 +1,215 @@
+/*
+0. Global
+1. Header
+*/
+
+body {
+  padding: 0px;
+  margin: 0px;
+  position: relative;
+  font: 14px Roboto, sans-serif;
+  font-weight: 500;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+/* 1. Header */
+
+#header {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: calc(100% - 30px);
+  height: 60px;
+  background-color: #EDF0DA;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 15px;
+  border-bottom: solid 1px #a89b8c;
+  z-index: 1000;
+}
+
+#header .header-left, #header .header-right, #header .header-left > a, #header .header-center > a, #header .header-right > .header-link {
+  display: flex;
+  align-items: center;
+}
+
+#header .header-center {
+  display: none;
+}
+
+#header .header-left a:first-child {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+#header .header-left > a.header-link {
+  padding: 0px 10px;
+  height: 100%;
+  border-bottom: solid 0px #a89b8c;
+  cursor: pointer;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+#header .header-left > a.header-link:hover {
+  border-bottom: solid 3px #a89b8c;
+  height: calc(100% - 3px);
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+#header .header-right i.fa.fa-bars {
+  display: none;
+  font-size: 26px;
+  color: #a89b8b;
+}
+
+#header .header-right .lang-select {
+  padding: 5px;
+  border: solid 1px #a89b8c;
+  color: #a89b8c;
+  border-radius: 2px;
+  cursor: pointer;
+  min-width: 18px;
+}
+
+#header .header-right .lang-select p {
+  margin: 0px;
+}
+
+.header-dropdown {
+  position: relative;
+}
+
+.header-dropdown ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  top: calc(100% - 9px);
+  right: 0;
+  width: 100%;
+  opacity: 0;
+  overflow: hidden;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.side-menu-dropdown ul {
+  display: flex;
+  align-items: center;
+  height: 29px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  top: 0px;
+  left: 100%;
+  width: fit-content;
+  opacity: 0;
+  overflow: hidden;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.header-dropdown.active ul {
+  opacity: 1;
+  top: calc(100% + 1px);
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.side-menu-dropdown.active ul {
+  opacity: 1;
+  left: calc(100% + 5px);
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.header-dropdown ul li.opt, .side-menu-dropdown.active ul li.opt {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  background-color: #edf0da;
+}
+
+.header-dropdown ul li.opt a, ul.lang-opt li.opt a {
+  color: #a89b8c;    
+}
+
+.header-dropdown ul li.opt:hover {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  background-color: #8f5c38;
+}
+
+.header-dropdown ul li.opt:hover a {
+  color: #edf0da;    
+}
+
+#side-menu {
+  position: fixed;
+  top: 60px;
+  display: flex;
+  flex-direction: column;
+  background-color: #edf0d9;
+  right: 100%;
+  min-height: calc(100% - 60px);
+  width: 100%;
+  z-index: 999;
+  -webkit-transition: right .2s ease-in;
+  transition: right .2s ease-in;
+}
+
+#side-menu.active {
+  right: 0;
+  -webkit-transition: right .2s ease-in;
+  transition: right .2s ease-in;
+}
+
+#side-menu a.side-menu-link {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lang-select.side-menu-dropdown {
+  min-width: 29px;
+  max-width: 29px;
+  margin: 0px 0px 0px 15px;
+  position: relative;
+}
+
+.lang-select.side-menu-dropdown p {
+  max-width: fit-content;
+  border: solid 1px #a89b8a;
+  color: #a89b8a;
+  margin: 0px;
+  padding: 5px;
+  border-radius: 2px;
+  width: 29px;
+}
+
+@media only screen and (max-width: 599px) {
+  #header .header-left, #header .header-right .header-link {
+    display: none;
+  }
+
+  #header .header-right i.fa.fa-bars {
+    cursor: pointer;
+    display: block;
+  }
+
+  #header .header-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
