@@ -2,20 +2,14 @@
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
     email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    roleId: {
-      type: DataTypes.INTEGER,
-      references: 'User_role',
-      key: 'id'
-    }
+    password: DataTypes.STRING
   });
 
-  User.associate = function(models) {
-    models.User.belongsTo(models.User_role, {
-      onDelete: 'CASCADE',
-      foreignKey: {
-        allowNull: false
-      }
+  User.associate = (models) => {
+    User.belongsTo(models.User_role, {
+      foreignKey: 'roleId',
+      as: 'roleDetail',
+      onDelete: 'CASCADE'
     })
   }
 
