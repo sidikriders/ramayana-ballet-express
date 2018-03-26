@@ -1,20 +1,21 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    roleId: {
+      type: DataTypes.INTEGER,
+      references: 'User_role',
+      key: 'id'
     }
   });
 
-  User.associate = (models) => {
-    User.belongsTo(models.UserRole, {
-      foreignKey: 'role'
+  User.associate = function(models) {
+    models.User.belongsTo(models.User_role, {
+      onDelete: 'CASCADE',
+      foreignKey: {
+        allowNull: false
+      }
     })
   }
 

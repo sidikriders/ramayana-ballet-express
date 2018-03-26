@@ -1,11 +1,10 @@
 {
   "development": {
-    "username": "sidik",
-    "password": "12345678",
-    "database": "ramayan1_develop_db",
+    "username": "root",
+    "password": "minenotyours",
+    "database": "ramayana_backend",
     "host": "127.0.0.1",
-    "port": 5432,
-    "dialect": "postgres"
+    "dialect": "mysql"
   },
   "test": {
     "username": "root",
