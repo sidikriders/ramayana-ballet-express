@@ -1,14 +1,17 @@
 var express = require('express');
 var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken')
 
 var router = express.Router();
 var models = require('../models');
 var User = models.User
 var UserRole = models.User_role
 var saltCount = require('../app-config.js').bcryptConf.saltCount
+var _authorize = require('../controllers/authorize.js')
+var secretKey = require('../app-config.js').secretKeyJWT
 
 // create User
-router.post('/', (req, res, next) => {
+router.post('/', _authorize.superAdmin, (req, res, next) => {
   if (!req.body.email || !validateEmail(req.body.email)) {
     res.status(401).send('need email')
   } else if (!req.body.password || !validatePasswod(req.body.password)) {
@@ -16,8 +19,6 @@ router.post('/', (req, res, next) => {
   } else if (!req.body.roleId) {
     res.status(401).send('need user role')
   } else {
-
-    console.log(saltCount)
     var hash = req.body.password ? bcrypt.hashSync(req.body.password, saltCount) : null;
 
     User.create({
@@ -30,7 +31,7 @@ router.post('/', (req, res, next) => {
 })
 
 // get all user
-router.get('/', (req, res, next) => {
+router.get('/', _authorize.superAdmin, (req, res, next) => {
   User.findAll({
     include: {
       model: UserRole,
@@ -43,8 +44,19 @@ router.get('/', (req, res, next) => {
   })
 })
 
+// check login and get roleId
+router.get('/check-login', (req, res, next) => {
+  if (!req.get('loginToken')) {
+    res.status.send('no token detected')
+  } else {
+    var token = req.get('loginToken')
+    var decryptedObj = jwt.verify(token, secretKey)
+    res.status(200).send(decryptedObj)
+  }
+})
+
 // get one user
-router.get('/:id', (req, res, next) => {
+router.get('/:id', _authorize.superAdmin, (req, res, next) => {
   User.findById(req.params.id, {
     include: {
       model: UserRole,
@@ -60,7 +72,7 @@ router.get('/:id', (req, res, next) => {
 })
 
 //  update one user
-router.put('/:id', (req, res, next) => {
+router.put('/:id', _authorize.superAdmin, (req, res, next) => {
   User.findById(req.params.id)
   .then(user => {
     if (user) {
@@ -79,7 +91,7 @@ router.put('/:id', (req, res, next) => {
 })
 
 // delete one user
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', _authorize.superAdmin, (req, res, next) => {
   User.findById(req.params.id)
   .then(user => {
     if (!user) {
@@ -89,6 +101,36 @@ router.delete('/:id', (req, res, next) => {
       .catch(err => res.status(401).send(err))
     }
   }).catch(err => res.status(401).send(err))
+})
+
+// login
+router.post('/login', (req, res, next) => {
+  if (!req.body.email) {
+    res.status(401).send('email not detected')
+  } else if (!req.body.password) {
+    res.status(401).send('password not detected')
+  } else {
+    User.findOne({
+      where: {
+        email: req.body.email
+      }
+    }).then(user => {
+      if (!user) {
+        res.status(401).send('user doesn\'t exist')
+      } else if (bcrypt.compareSync(req.body.password, user.password)) {
+        var userDetail = user.dataValues
+        var jwtToken = jwt.sign({
+          email: userDetail.email,
+          roleId: userDetail.roleId
+        }, secretKey)
+        res.status(200).send(jwtToken)
+      } else {
+        res.status(401).send('wrong password')
+      }
+    }).catch(err => {
+      res.status(400).send(err)
+    })
+  }
 })
 
 function validateEmail(email) {

@@ -1,9 +1,16 @@
 var databaseConfig = {
-  username: "mySqlUsername",
-  password: "mySqlPassword"
-  dbName: "ramayana_backend"
+  username: 'username',
+  password: 'password',
+  database: 'ramayana_backend',
+  host: '127.0.0.1',
+  dialect: 'mysql'
 }
 
+var bcryptConf = {
+  saltCount: 999
+}
 module.exports = {
-  databaseConfig
+  databaseConfig,
+  bcryptConf,
+  secretKeyJWT: 'secretKey'
 }
