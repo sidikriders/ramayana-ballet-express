@@ -58,6 +58,7 @@ typings/
 .env
 
 # sequelize config file
+/config/config.json
 
 # app config file
 app-config.js
