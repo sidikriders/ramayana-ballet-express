@@ -3,8 +3,10 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+
 var userController = require('./routers/user.js')
 var authController = require('./routers/auth.js')
+var showController = require('./routers/show.js')
 
 var app = express();
 
@@ -15,8 +17,9 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', authController.router)
-app.use(authController.checkBearer)
+// app.use(authController.checkBearer)
 app.use('/user', userController)
+app.use('/show', showController)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
