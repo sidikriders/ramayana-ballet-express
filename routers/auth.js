@@ -56,6 +56,27 @@ router.post('/login', (req, res, next) => {
   })
 })
 
+router.get('/logout', (req, res, next) => {
+  var token = req.query.token
+  if (!token) {
+    res.status(500).send('token invalid')
+  } else {
+    TokenList.findOne({
+      where: {
+        token: token
+      }
+    }).then(_token => {
+      if (!_token) {
+        res.status(500).send('token not found')
+      } else {
+        return _token.destroy().then( () => res.status(200).send('success')).catch(err => next(err))
+      }
+    }).catch(err => {
+      next(err)
+    })
+  }
+})
+
 module.exports = {
   router,
   checkBearer: (req, res, next) => {
