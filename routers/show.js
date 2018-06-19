@@ -7,6 +7,7 @@ var ShowType = models.showType
 var ShowImage = models.showImage
 var ShowPriceList = models.showPriceList
 
+// get all showtype
 router.get('/show-type', (req, res, next) => {
   ShowType.findAll({
     include: [
@@ -25,6 +26,10 @@ router.get('/show-type', (req, res, next) => {
   })
 })
 
+// create show type
+// upload image of seat map
+// upload show type pictures (ini foto2 suasana show type nya)
+// create price list
 router.post('/show-type', (req, res, next) => {
   // upload seat map image, save url to seatMapUrl
   var seatMapUrl = req.body.seatMapUrl
@@ -76,6 +81,7 @@ router.post('/show-type', (req, res, next) => {
   })
 })
 
+// delete show type
 router.delete('/show-type/:id', (req, res, next) => {
   var _id = req.params.id
   Promise.all([
@@ -101,6 +107,7 @@ router.delete('/show-type/:id', (req, res, next) => {
   })
 })
 
+// get all price list
 router.get('/price-list', (req, res, next) => {
   ShowPriceList.findAll({
     attributes: [
@@ -112,4 +119,5 @@ router.get('/price-list', (req, res, next) => {
     next(err)
   })
 })
+
 module.exports = router
