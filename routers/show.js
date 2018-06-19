@@ -6,6 +6,7 @@ var models = require('../models')
 var ShowType = models.showType
 var ShowImage = models.showImage
 var ShowPriceList = models.showPriceList
+var seatList = models.seatList
 
 // get all showtype
 router.get('/show-type', (req, res, next) => {
@@ -17,6 +18,9 @@ router.get('/show-type', (req, res, next) => {
       }, {
         model: ShowPriceList,
         attributes: ['id', 'priceType', 'price']
+      }, {
+        model: seatList,
+        attributes: ['id', 'row', 'column']
       }
     ]
   }).then(showList => {
@@ -33,52 +37,76 @@ router.get('/show-type', (req, res, next) => {
 router.post('/show-type', (req, res, next) => {
   // upload seat map image, save url to seatMapUrl
   var seatMapUrl = req.body.seatMapUrl
-  // create show type
-  ShowType.create({
-    name: req.body.showTypeName,
-    seatMap: seatMapUrl
-  }).then(newType => {
-    Promise.all([
-      // upload show images, create showImages for every url
-      Promise.all(req.body.showImages.map(image => {
-        ShowImage.create({
-          url: image,
-          showTypeId: newType.id
+
+  // check if all requirements is there
+  if (!req.body.showTypeName) {
+    res.status(500).send('show type name not defined')
+  } else if (!seatMapUrl) {
+    res.status(500).send('seat map url not defined')
+  } else if (!req.body.showImages || req.body.showImages.length < 1) {
+    res.status(500).send('show images not defined')
+  } else if (!req.body.priceLists) {
+    res.status(500).send('price list not defined')
+  } else if (!req.body.seatLists || req.body.seatLists.length < 1) {
+    res.status(500).send('seat list not defined')
+  } else {
+    // create show type
+    ShowType.create({
+      name: req.body.showTypeName,
+      seatMap: seatMapUrl
+    }).then(newType => {
+      Promise.all([
+        // upload show images, create showImages for every url
+        Promise.all(req.body.showImages.map(image => {
+          ShowImage.create({
+            url: image,
+            showTypeId: newType.id
+          })
+        })),
+        // create price list
+        Promise.all(req.body.priceLists.map(price => {
+          ShowPriceList.create({
+            showTypeId: newType.id,
+            priceType: price.name,
+            price: price.price
+          })
+        })),
+        Promise.all(req.body.seatLists.map(seat) => {
+          seatList.create({
+            showTypeId: newType.id,
+            row: seat.row,
+            column: seat.column
+          })
         })
-      })),
-      // create price list
-      Promise.all(req.body.priceList.map(price => {
-        ShowPriceList.create({
-          showTypeId: newType.id,
-          priceType: price.name,
-          price: price.price
+      ]).then(resp => {
+        ShowType.findOne({
+          where: {
+            id: newType.id
+          },
+          include: [
+            {
+              model: ShowImage,
+              attributes: ['id', 'url']
+            }, {
+              model: ShowPriceList,
+              attributes: ['id', 'priceType', 'price']
+            }, {
+              model: seatList,
+              attributes: ['id', 'row', 'column']
+            }
+          ]
+        }).then(showList => {
+          res.status(200).send(showList)
+        }).catch(err => {
+          next(err)
         })
-      }))
-    ]).then(resp => {
-      ShowType.findOne({
-        where: {
-          id: newType.id
-        },
-        include: [
-          {
-            model: ShowImage,
-            attributes: ['id', 'url']
-          }, {
-            model: ShowPriceList,
-            attributes: ['id', 'priceType', 'price']
-          }
-        ]
-      }).then(showList => {
-        res.status(200).send(showList)
       }).catch(err => {
         next(err)
       })
     }).catch(err => {
       next(err)
     })
-  }).catch(err => {
-    next(err)
-  })
+  }
 })
 
 // delete show type
