@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var userController = require('./routers/user.js')
 var authController = require('./routers/auth.js')
 var showController = require('./routers/show.js')
+var attractionController = require('./routers/attraction.js')
+var tagController = require('./routers/tag.js')
 
 var app = express();
 
@@ -20,7 +22,8 @@ app.use('/auth', authController.router)
 // app.use(authController.checkBearer)
 app.use('/user', userController)
 app.use('/show', showController)
-
+app.use('/tags', tagController)
+app.use('/attraction', attractionController)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
