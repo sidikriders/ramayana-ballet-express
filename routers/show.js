@@ -34,6 +34,7 @@ router.get('/show-type', (req, res, next) => {
 // upload image of seat map
 // upload show type pictures (ini foto2 suasana show type nya)
 // create price list
+// create seat list
 router.post('/show-type', (req, res, next) => {
   // upload seat map image, save url to seatMapUrl
   var seatMapUrl = req.body.seatMapUrl
@@ -45,9 +46,9 @@ router.post('/show-type', (req, res, next) => {
     res.status(500).send('seat map url not defined')
   } else if (!req.body.showImages || req.body.showImages.length < 1) {
     res.status(500).send('show images not defined')
-  } else if (!req.body.priceLists) {
+  } else if (!req.body.priceList) {
     res.status(500).send('price list not defined')
-  } else if (!req.body.seatLists || req.body.seatLists.length < 1) {
+  } else if (!req.body.seatList || req.body.seatList.length < 1) {
     res.status(500).send('seat list not defined')
   } else {
     // create show type
@@ -64,20 +65,21 @@ router.post('/show-type', (req, res, next) => {
           })
         })),
         // create price list
-        Promise.all(req.body.priceLists.map(price => {
+        Promise.all(req.body.priceList.map(price => {
           ShowPriceList.create({
             showTypeId: newType.id,
             priceType: price.name,
             price: price.price
           })
         })),
-        Promise.all(req.body.seatLists.map(seat) => {
+        // create seat list
+        Promise.all(req.body.seatList.map(seat => {
           seatList.create({
             showTypeId: newType.id,
             row: seat.row,
             column: seat.column
           })
-        })
+        }))
       ]).then(resp => {
         ShowType.findOne({
           where: {
@@ -124,6 +126,11 @@ router.delete('/show-type/:id', (req, res, next) => {
       }
     }),
     ShowPriceList.destroy({
+      where: {
+        showTypeId: _id
+      }
+    }),
+    seatList.destroy({
       where: {
         showTypeId: _id
       }

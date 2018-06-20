@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   showType.associate = (models) => {
     showType.hasMany(models.showImage)
     showType.hasMany(models.showPriceList)
+    showType.hasMany(models.seatList)
   }
 
   return showType;
