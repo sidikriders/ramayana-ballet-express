@@ -1,5 +1,6 @@
 var router = require('express').Router()
 
+var attractionGroupController = require('./attraction-group.js')
 var models = require('../models')
 var Attraction = models.attraction
 var AttractionGroup = models.attractionGroup
@@ -24,6 +25,6 @@ router.get('/', (req, res, next) => {
   })
 })
 
-// get all group attraction
+router.use('/group', attractionGroupController)
 
 module.exports = router;
