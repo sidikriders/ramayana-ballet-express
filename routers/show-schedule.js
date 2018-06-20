@@ -26,6 +26,36 @@ router.get('/', (req, res, next) => {
   })
 })
 
+// get one active schedule
+router.get('/:id', (req, res, next) => {
+  ShowSchedule.findOne({
+    where: {
+      id: req.params.id
+    },
+    include: [
+      {
+        model: ShowType,
+        attributes: ['id', 'name', 'seatMap'],
+        include: [
+          {
+            model: ShowImages,
+            attributes: ['id', 'url']
+          }, {
+            model: ShowPriceList,
+            attributes: ['id', 'priceType', 'price']
+          }
+        ]
+      }
+    ]
+  }).then(schedule => {
+    if (!schedule) {
+      res.status(400).send('schedule not exist')
+    } else {
+      res.status(200).send(schedule)
+    }
+  })
+})
+
 // create schedule
 router.post('/', (req, res, next) => {
   var body = req.body
