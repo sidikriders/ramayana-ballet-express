@@ -1,12 +1,12 @@
 var router = require('express').Router()
-var bcrypt = require('bcrypt')
-var jwt = require('jsonwebtoken')
 
+var showSchedule = require('./show-schedule.js')
 var models = require('../models')
 var ShowType = models.showType
 var ShowImage = models.showImage
 var ShowPriceList = models.showPriceList
-var seatList = models.seatList
+var SeatList = models.seatList
+var ShowSchedule = models.showSchedule
 
 // get all showtype
 router.get('/show-type', (req, res, next) => {
@@ -19,7 +19,7 @@ router.get('/show-type', (req, res, next) => {
         model: ShowPriceList,
         attributes: ['id', 'priceType', 'price']
       }, {
-        model: seatList,
+        model: SeatList,
         attributes: ['id', 'row', 'column']
       }
     ]
@@ -44,7 +44,7 @@ router.get('/show-type/:id', (req, res, next) => {
         model: ShowPriceList,
         attributes: ['id', 'priceType', 'price']
       }, {
-        model: seatList,
+        model: SeatList,
         attributes: ['id', 'row', 'column']
       }
     ]
@@ -99,7 +99,7 @@ router.post('/show-type', (req, res, next) => {
         })),
         // create seat list
         Promise.all(req.body.seatList.map(seat => {
-          seatList.create({
+          SeatList.create({
             showTypeId: newType.id,
             row: seat.row,
             column: seat.column
@@ -118,7 +118,7 @@ router.post('/show-type', (req, res, next) => {
               model: ShowPriceList,
               attributes: ['id', 'priceType', 'price']
             }, {
-              model: seatList,
+              model: SeatList,
               attributes: ['id', 'row', 'column']
             }
           ]
@@ -155,7 +155,12 @@ router.delete('/show-type/:id', (req, res, next) => {
         showTypeId: _id
       }
     }),
-    seatList.destroy({
+    SeatList.destroy({
+      where: {
+        showTypeId: _id
+      }
+    }),
+    ShowSchedule.destroy({
       where: {
         showTypeId: _id
       }
@@ -179,5 +184,7 @@ router.get('/price-list', (req, res, next) => {
     next(err)
   })
 })
+
+router.use('/schedule', showSchedule)
 
 module.exports = router
