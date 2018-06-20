@@ -130,4 +130,17 @@ router.post('/', (req, res, next) => {
   }
 })
 
+// delete schedule
+router.delete('/:id', (req, res, next) => {
+  ShowSchedule.destroy({
+    where: {
+      id: req.params.id
+    }
+  }).then(() => {
+    res.status(200).send(true)
+  }).catch(err => {
+    next(err)
+  })
+})
+
 module.exports = router
