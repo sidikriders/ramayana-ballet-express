@@ -30,6 +30,31 @@ router.get('/show-type', (req, res, next) => {
   })
 })
 
+// get one showType by id
+router.get('/show-type/:id', (req, res, next) => {
+  ShowType.findOne({
+    where: {
+      id: req.params.id
+    },
+    include: [
+      {
+        model: ShowImage,
+        attributes: ['id', 'url']
+      }, {
+        model: ShowPriceList,
+        attributes: ['id', 'priceType', 'price']
+      }, {
+        model: seatList,
+        attributes: ['id', 'row', 'column']
+      }
+    ]
+  }).then(show => {
+    res.status(200).send(show)
+  }).catch(err => {
+    next(err)
+  })
+})
+
 // create show type
 // upload image of seat map
 // upload show type pictures (ini foto2 suasana show type nya)
