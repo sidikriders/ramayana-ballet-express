@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
       through: 'tag_attraction',
       as: 'tags'
     })
+    attraction.belongsToMany(models.tourPackage, {
+      through: 'tour_attraction',
+      as: 'packageList'
+    })
   }
 
   return attraction;
