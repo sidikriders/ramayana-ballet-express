@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# sequelize config file
+/config/config.json
+
+# app config file
+app-config.js
