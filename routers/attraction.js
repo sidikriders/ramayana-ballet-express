@@ -8,6 +8,9 @@ var AttractionImage = models.attractionImage
 var Tag = models.tag
 var TagAttraction = models.tag_attraction
 
+// routing for group
+router.use('/group', attractionGroupController)
+
 // get all attraction
 router.get('/', (req, res, next) => {
   Attraction.findAll({
@@ -22,20 +25,6 @@ router.get('/', (req, res, next) => {
     ]
   }).then(attractions => {
     res.status(200).send(attractions)
-  }).catch(err => {
-    next(err)
-  })
-})
-
-router.post('/test', (req, res, next) => {
-  AttractionImage.create({
-    title: 'Foto  ' + 'newAttraction.name',
-    titleEn: 'Picture  of ' + 'newAttraction.nameEn',
-    url: 'some',
-    attractionId: 1
-  }).then(image => {
-    console.log(image.id)
-    res.send(image)
   }).catch(err => {
     next(err)
   })
@@ -187,6 +176,58 @@ router.post('/', (req, res, next) => {
   }
 })
 
-router.use('/group', attractionGroupController)
+// get one attraction
+router.get('/:id', (req, res, next) => {
+  Attraction.findById(req.params.id, {
+    include: [
+      {
+        model: AttractionGroup,
+        attributes: ['id', 'name', 'nameEn']
+      }, {
+        model: AttractionImage,
+        attributes: ['id', 'url', 'title', 'titleEn']
+      }, 'tags'
+    ]
+  }).then(attraction => {
+    if (!attraction) {
+      res.status(404).send('attraction not exist')
+    } else {
+      res.send(attraction)
+    }
+  }).catch(err => {
+    next(err)
+  })
+})
+
+// delete one attraction
+router.delete('/:id', (req, res, next) => {
+  var id = req.params.id
+  Promise.all([
+    Attraction.destroy({
+      where: {
+        id: id
+      }
+    }).then(() => { return { status: true } }).catch(err => { return { status: false, data: err } }),
+    AttractionImage.destroy({
+      where: {
+        attractionId: id
+      }
+    }).then(() => { return { status: true } }).catch(err => { return { status: false, data: err } }),
+    TagAttraction.destroy({
+      where: {
+        attractionId: id
+      }
+    }).then(() => { return { status: true } }).catch(err => { return { status: false, data: err } })
+  ]).then(resp => {
+    var errorResp = resp.filter(res => !res.status)
+    if (errorResp.length > 0) {
+      next(errorResp[0].data)
+    } else {
+      res.send(true)
+    }
+  }).catch(err => {
+    next(err)
+  })
+})
 
 module.exports = router;
