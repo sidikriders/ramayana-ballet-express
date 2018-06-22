@@ -1,6 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var attraction = sequelize.define('attraction', {
+    published: DataTypes.BOOLEAN,
     name: DataTypes.STRING,
     nameEn: DataTypes.STRING,
     shortDesc: DataTypes.STRING,
@@ -16,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     attraction.belongsToMany(models.tag, {
       through: 'tag_attraction',
       as: 'tags'
+    })
+    attraction.belongsToMany(models.tourPackage, {
+      through: 'tour_attraction',
+      as: 'packageList'
     })
   }
 

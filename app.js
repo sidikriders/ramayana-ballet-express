@@ -9,6 +9,7 @@ var authController = require('./routers/auth.js')
 var showController = require('./routers/show.js')
 var attractionController = require('./routers/attraction.js')
 var tagController = require('./routers/tag.js')
+var tourController = require('./routers/tour-packages.js')
 
 var app = express();
 
@@ -24,6 +25,8 @@ app.use('/user', userController)
 app.use('/show', showController)
 app.use('/tags', tagController)
 app.use('/attraction', attractionController)
+app.use('/tour-packages', tourController)
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

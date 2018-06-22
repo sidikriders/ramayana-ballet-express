@@ -53,12 +53,24 @@ router.post('/', (req, res, next) => {
 
 // delete group
 router.delete('/:id', (req, res, next) => {
-  AttractionGroup.destroy({
+  Attraction.find({
     where: {
-      id: req.params.id
+      attractionGroupId: req.params.id
     }
-  }).then(() => {
-    res.status(200).send(true)
+  }).then(attrList => {
+    if (attrList) {
+      res.status(500).send('you should delete all attraction with this group first')
+    } else {
+      AttractionGroup.destroy({
+        where: {
+          id: req.params.id
+        }
+      }).then(() => {
+        res.status(200).send(true)
+      }).catch(err => {
+        next(err)
+      })
+    }
   }).catch(err => {
     next(err)
   })
