@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       through: 'tour_attraction',
       as: 'includes'
     })
+    tourPackage.hasOne(models.tpPrice)
+    tourPackage.hasOne(models.tpDuration)
   }
 
   return tourPackage;
