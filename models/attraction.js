@@ -1,6 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   var attraction = sequelize.define('attraction', {
+    published: DataTypes.BOOLEAN,
     name: DataTypes.STRING,
     nameEn: DataTypes.STRING,
     shortDesc: DataTypes.STRING,
