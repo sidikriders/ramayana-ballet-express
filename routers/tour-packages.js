@@ -220,7 +220,8 @@ router.delete('/:id', (req, res, next) => {
       where: {
         tourPackageId: id
       }
-    }) , TpPrice.destroy({
+    }),
+    TpPrice.destroy({
       where: {
         tpId: id
       }
