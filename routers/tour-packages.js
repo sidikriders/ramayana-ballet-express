@@ -112,7 +112,6 @@ router.post('/', (req, res, next) => {
     var _price = body.price
     var _duration = body.duration
     var _includes = body.includes
-    console.log(_includes)
     Promise.all([
       // create price
       TpPrice.create({
@@ -181,7 +180,6 @@ router.post('/', (req, res, next) => {
         }
       })
     ]).then(resp => {
-      console.log('\n\n', JSON.stringify(resp, null, 2))
       if (resp.find(res => !res.status)) {
         next(resp.filter(res => !res.status))
       } else {
@@ -220,7 +218,8 @@ router.delete('/:id', (req, res, next) => {
       where: {
         tourPackageId: id
       }
-    }) , TpPrice.destroy({
+    }),
+    TpPrice.destroy({
       where: {
         tpId: id
       }
