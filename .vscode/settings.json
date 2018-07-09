@@ -1,0 +1,7 @@
+{
+  "standard.enable": true,
+  "standard.validate": [
+    "javascript",
+    "javascriptreact"
+  ]
+}

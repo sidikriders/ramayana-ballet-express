@@ -24,7 +24,10 @@ router.get('/show-type', (req, res, next) => {
       }
     ]
   }).then(showList => {
-    res.status(200).send(showList)
+    res.send({
+      status: true,
+      data: showList
+    })
   }).catch(err => {
     next(err)
   })

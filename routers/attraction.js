@@ -160,7 +160,6 @@ router.post('/', (req, res, next) => {
                 }, 'tags'
               ]
             }).then(attr => {
-              console.log('\n\nattr', JSON.stringify(attr, null, 2))
               res.status(200).send(attr)
             }).catch(err => {
               next(err)
